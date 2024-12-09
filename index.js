@@ -1,13 +1,24 @@
-const express = require('express')
+import express, { urlencoded, json } from 'express'
 const app = express()
 
-const port = process.env.port || 3000
+import users from '../API/users.js'
 
-app.use(express.urlencoded({ extended: false }))
-app.use(express.json())
+
+
+const port = process.env.port || 3001
+
+app.use(urlencoded({ extended: false }))
+app.use(json())
+app.use(users)
 
 app.get('/', (req, res)=>{
     res.send('hello world')
+})
+
+app.post('/login', (req, res)=>{
+
+
+    res.send({})
 })
 
 
