@@ -6,7 +6,7 @@ dotenv.config()
 class Data_base {
     constructor() {
         this.dataBase = process.env.DB_NAME;
-        this.uri = process.env.DB_URL_LOCAL
+        this.uri = process.env.DB_URL
         this.client = new MongoClient(this.uri, {
             serverApi: {
                 version: ServerApiVersion.v1,
