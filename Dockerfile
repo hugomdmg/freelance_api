@@ -1,5 +1,5 @@
 # Usar una imagen base de Node.js LTS
-FROM node:18
+FROM node:20
 
 # Establecer el directorio de trabajo dentro del contenedor
 WORKDIR /API
@@ -8,7 +8,7 @@ WORKDIR /API
 COPY package*.json ./
 
 # Instalar dependencias
-RUN npm install --production
+RUN npm install --omit=dev
 
 # Copiar el resto del código al contenedor
 COPY . .
