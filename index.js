@@ -1,11 +1,14 @@
 import express, { urlencoded, json } from 'express'
 import users from './rutes/users.js'
+import cors from 'cors'
 
 const app = express()
 const port = process.env.port || 3001
 
 app.use(urlencoded({ extended: false }))
 app.use(json())
+app.use(cors());
+
 app.use(users)
 
 
