@@ -11,4 +11,4 @@ COPY . .
 # Exponer el puerto en el que la API escuchará
 EXPOSE 3001
 # Comando para iniciar el backend
-CMD ["npx", "nodemon", "index.js"]
+CMD ["npx", "nodemon", "src/index.js"]
