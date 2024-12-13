@@ -1,5 +1,5 @@
 import express, { urlencoded, json } from 'express'
-import users from './routes/users.js'
+import users from './src/routes/users.js'
 import cors from 'cors'
 
 const app = express()
