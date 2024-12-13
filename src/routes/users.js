@@ -1,9 +1,8 @@
 import { Router } from 'express';
 import bcrypt from 'bcrypt';
-import DataBase from '../services/data_base.js';
+import db from '../services/data_base.js';
 
 const router = Router();
-const db = new DataBase();
 
 
 

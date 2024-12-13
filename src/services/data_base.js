@@ -3,39 +3,41 @@ import dotenv from "dotenv";
 
 dotenv.config();
 
+const dataBase = process.env.DB_NAME;
+const uri = process.env.DB_URL;
+
+if (!dataBase || !uri) {
+    throw new Error("Environment variables DB_NAME and DB_URL are required.");
+}
+
+const client = new MongoClient(uri, {
+    serverApi: {
+        version: ServerApiVersion.v1,
+        strict: true,
+        deprecationErrors: true,
+    },
+});
+
+
 class DataBase {
     constructor() {
-        this.dataBase = process.env.DB_NAME;
-        this.uri = process.env.DB_URL;
-
-        if (!this.dataBase || !this.uri) {
-            throw new Error("Environment variables DB_NAME and DB_URL are required.");
-        }
-
-        this.client = new MongoClient(this.uri, {
-            serverApi: {
-                version: ServerApiVersion.v1,
-                strict: true,
-                deprecationErrors: true,
-            },
-        });
     }
 
     async connect() {
-        if (!this.client.topology || !this.client.topology.isConnected()) {
-            await this.client.connect();
+        if (!client.topology || !client.topology.isConnected()) {
+            await client.connect();
         }
     }
 
     async disconnect() {
-        if (this.client.topology && this.client.topology.isConnected()) {
-            await this.client.close();
+        if (client.topology && client.topology.isConnected()) {
+            await client.close();
         }
     }
 
     async getAllItems(collectionName) {
         await this.connect();
-        const database = this.client.db(this.dataBase);
+        const database = client.db(dataBase);
         const collection = database.collection(collectionName);
         const items = await collection.find().toArray();
         await this.disconnect();
@@ -44,7 +46,7 @@ class DataBase {
 
     async getFilteredItems(collectionName, filter) {
         await this.connect();
-        const database = this.client.db(this.dataBase);
+        const database = client.db(dataBase);
         const collection = database.collection(collectionName);
         const items = await collection.find(filter).toArray();
         await this.disconnect();
@@ -53,7 +55,7 @@ class DataBase {
 
     async addItem(collectionName, item) {
         await this.connect();
-        const database = this.client.db(this.dataBase);
+        const database = client.db(dataBase);
         const collection = database.collection(collectionName);
         const result = await collection.insertOne(item);
         await this.disconnect();
@@ -62,7 +64,7 @@ class DataBase {
 
     async deleteItem(collectionName, filter) {
         await this.connect();
-        const database = this.client.db(this.dataBase);
+        const database = client.db(dataBase);
         const collection = database.collection(collectionName);
         const result = await collection.deleteOne(filter);
         await this.disconnect();
@@ -71,7 +73,7 @@ class DataBase {
 
     async updateItem(collectionName, filter, update) {
         await this.connect();
-        const database = this.client.db(this.dataBase);
+        const database = client.db(dataBase);
         const collection = database.collection(collectionName);
         const result = await collection.updateOne(filter, { $set: update });
         await this.disconnect();
@@ -79,4 +81,6 @@ class DataBase {
     }
 }
 
-export default DataBase;
+const db = new DataBase()
+
+export default db;

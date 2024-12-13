@@ -1,6 +1,7 @@
 import express, { urlencoded, json } from 'express'
 import users from './src/routes/users.js'
 import cors from 'cors'
+import chats from './src/routes/chats.js'
 
 const app = express()
 const port = process.env.port || 3001
@@ -10,6 +11,7 @@ app.use(json())
 app.use(cors());
 
 app.use(users)
+app.use(chats)
 
 
 app.get('/', (req, res)=>{
@@ -19,3 +21,4 @@ app.get('/', (req, res)=>{
 
 
 app.listen(port, () => { console.log(`Server: http://localhost:${port}`) })
+
