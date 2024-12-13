@@ -53,12 +53,12 @@ router.post('/login', async (req, res) => {
         if (registered.length === 1) {
             const match = await bcrypt.compare(password, registered[0].password);
             if (match) {
-                res.send({ status: 200, value: 'Login successful' });
+                res.send({ status: 200, value: 'Login successful', data: registered[0] });
             } else {
-                res.send({ status: 400, value: 'Invalid username or password' });
+                res.send({ status: 400, value: 'Invalid username or password', data: {} });
             }
         } else {
-            res.send({ status: 401, value: 'Invalid username or password' });
+            res.send({ status: 400, value: 'Invalid username or password', data: {} });
         }
     } catch (error) {
         console.error('Error during login:', error);

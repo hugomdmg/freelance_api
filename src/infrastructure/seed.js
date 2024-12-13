@@ -1,30 +1,105 @@
 import db from '../services/data_base.js';
+import bcrypt from 'bcrypt';
+
+const password1 = await bcrypt.hash('password1', 10);
+const password2 = await bcrypt.hash('password2', 10);
+const password3 = await bcrypt.hash('password3', 10);
+
+
 
 const seedData = async () => {
     const data = [
         {
-            username: 'usuario 1',
-            password: 'password 1',
+            username: 'hugo',
+            password: password1,
+            roll: 'admin',
             projects: [],
             chats: [
-                { owner: 'usuario 1', message: 'hola' },
-                { owner: 'usuario 2', message: 'dime' }]
+                {
+                    user: 'usuario 2',
+                    messages: [
+                        { owner: 'usuario 2', message: 'hola' },
+                        { owner: 'hugo', message: 'dime' }
+
+                    ]
+                },
+                {
+                    user: 'usuario 3',
+                    messages: [
+                        { owner: 'usuario 3', message: 'tengo una duda' },
+                        { owner: 'hugo', message: 'cuentame' }
+
+                    ]
+                }
+            ]
         },
         {
             username: 'usuario 2',
-            password: 'password 2',
-            projects: [],
+            password: password2,
+            roll: 'costumer',
+            projects: [
+                {
+                    name: 'Project 1',
+                    status: 'Finished',
+                    link: 'https://main.d183snd9vhmvw3.amplifyapp.com/',
+                    dates: ['23/01/2025', '12/02/2025'],
+                    missingPayment: 200,
+                    totalPaid: 300,
+                    trelloLink: '',
+                  },
+                  {
+                    name: 'Project 2',
+                    status: 'Not Finished',
+                    link: 'https://main.d183snd9vhmvw3.amplifyapp.com/',
+                    dates: ['05/12/2024', '15/04/2025'],
+                    missingPayment: 6600,
+                    totalPaid: 300,
+                    trelloLink: '',
+                  },
+                  {
+                    name: 'Project 3',
+                    status: 'Finished',
+                    link: 'https://main.d183snd9vhmvw3.amplifyapp.com/',
+                    dates: ['01/05/2025', '20/06/2025'],
+                    missingPayment: 200,
+                    totalPaid: 300,
+                    trelloLink: '',
+                  },
+            ],
             chats: [
-                { owner: 'usuario 1', message: 'hola' },
-                { owner: 'usuario 2', message: 'dime' }]
+                {
+                    user: 'hugo',
+                    messages: [
+                        { owner: 'usuario 2', message: 'hola' },
+                        { owner: 'hugo', message: 'dime' }
+                    ]
+                }
+            ]
         },
         {
             username: 'usuario 3',
-            password: 'password 3',
-            projects: [],
+            password: password3,
+            roll: 'costumer',
+            projects: [
+                {
+                    name: 'Project 1',
+                    status: 'Finished',
+                    link: 'https://main.d183snd9vhmvw3.amplifyapp.com/',
+                    dates: ['23/01/2025', '12/02/2025'],
+                    missingPayment: 200,
+                    totalPaid: 300,
+                    trelloLink: '',
+                  },
+            ],
             chats: [
-                { owner: 'usuario 3', message: 'hola' },
-                { owner: 'usuario 2', message: 'dime' }]
+                {
+                    user: 'hugo',
+                    messages: [
+                        { owner: 'usuario 3', message: 'tengo una duda' },
+                        { owner: 'hugo', message: 'cuentame' }
+                    ]
+                }
+            ]
         }
     ];
 
