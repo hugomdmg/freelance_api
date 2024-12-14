@@ -10,7 +10,7 @@ const password3 = await bcrypt.hash('password3', 10);
 const seedData = async () => {
     const data = [
         {
-            username: 'hugo',
+            email: 'hugo',
             password: password1,
             roll: 'admin',
             projects: [],
@@ -34,7 +34,7 @@ const seedData = async () => {
             ]
         },
         {
-            username: 'usuario 2',
+            email: 'usuario 2',
             password: password2,
             roll: 'costumer',
             projects: [
@@ -77,7 +77,7 @@ const seedData = async () => {
             ]
         },
         {
-            username: 'usuario 3',
+            email: 'usuario 3',
             password: password3,
             roll: 'costumer',
             projects: [
@@ -107,7 +107,7 @@ const seedData = async () => {
         await db.connect();
 
         for (const user of data) {
-            const existing = await db.getFilteredItems('users', { username: user.username });
+            const existing = await db.getFilteredItems('users', { email: user.email });
             if (existing.length === 0) {
                 await db.addItem('users', user);
             }
