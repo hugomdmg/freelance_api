@@ -2,6 +2,7 @@ import express, { urlencoded, json } from 'express'
 import users from './src/routes/users.js'
 import cors from 'cors'
 import chats from './src/routes/chats.js'
+import projects from './src/routes/projects.js'
 
 const app = express()
 const port = process.env.port || 3001
@@ -12,6 +13,7 @@ app.use(cors());
 
 app.use(users)
 app.use(chats)
+app.use(projects)
 
 
 app.get('/', (req, res)=>{

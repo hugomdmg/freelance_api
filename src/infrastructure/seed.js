@@ -10,7 +10,7 @@ const password3 = await bcrypt.hash('password3', 10);
 const seedData = async () => {
     const data = [
         {
-            email: 'hugo',
+            email: 'admin',
             password: password1,
             roll: 'admin',
             projects: [],
@@ -19,7 +19,7 @@ const seedData = async () => {
                     user: 'usuario 2',
                     messages: [
                         { owner: 'usuario 2', message: 'hola' },
-                        { owner: 'hugo', message: 'dime' }
+                        { owner: 'admin', message: 'dime' }
 
                     ]
                 },
@@ -27,7 +27,7 @@ const seedData = async () => {
                     user: 'usuario 3',
                     messages: [
                         { owner: 'usuario 3', message: 'tengo una duda' },
-                        { owner: 'hugo', message: 'cuentame' }
+                        { owner: 'admin', message: 'cuentame' }
 
                     ]
                 }
@@ -39,6 +39,7 @@ const seedData = async () => {
             roll: 'costumer',
             projects: [
                 {
+                    id:23,
                     name: 'Project 1',
                     status: 'Finished',
                     link: 'https://main.d183snd9vhmvw3.amplifyapp.com/',
@@ -48,6 +49,7 @@ const seedData = async () => {
                     trelloLink: '',
                   },
                   {
+                    id:123,
                     name: 'Project 2',
                     status: 'Not Finished',
                     link: 'https://main.d183snd9vhmvw3.amplifyapp.com/',
@@ -57,6 +59,7 @@ const seedData = async () => {
                     trelloLink: '',
                   },
                   {
+                    id:123123,
                     name: 'Project 3',
                     status: 'Finished',
                     link: 'https://main.d183snd9vhmvw3.amplifyapp.com/',
@@ -68,10 +71,10 @@ const seedData = async () => {
             ],
             chats: [
                 {
-                    user: 'hugo',
+                    user: 'admin',
                     messages: [
                         { owner: 'usuario 2', message: 'hola' },
-                        { owner: 'hugo', message: 'dime' }
+                        { owner: 'admin', message: 'dime' }
                     ]
                 }
             ]
@@ -82,6 +85,7 @@ const seedData = async () => {
             roll: 'costumer',
             projects: [
                 {
+                    id:32232131,
                     name: 'Project 1',
                     status: 'Finished',
                     link: 'https://main.d183snd9vhmvw3.amplifyapp.com/',
@@ -93,10 +97,10 @@ const seedData = async () => {
             ],
             chats: [
                 {
-                    user: 'hugo',
+                    user: 'admin',
                     messages: [
                         { owner: 'usuario 3', message: 'tengo una duda' },
-                        { owner: 'hugo', message: 'cuentame' }
+                        { owner: 'admin', message: 'cuentame' }
                     ]
                 }
             ]
