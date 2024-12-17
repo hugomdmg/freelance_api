@@ -8,7 +8,9 @@ router.post('/make-payment', async (req, res) => {
 
     const [user] = await db.getFilteredItems('users', { email: data.email })
     const projectIndex = user.projects.findIndex(project => project.id == data.projectId)
-    user.projects[projectIndex].missingPayment -= data.payment
+    user.projects[projectIndex].missingPayment -= data.paymentData.payment
+
+    console.log(data.paymentData)
 
     const result = await db.updateItem('users', {email:data.email}, user)
 
