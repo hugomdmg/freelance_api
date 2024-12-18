@@ -13,7 +13,7 @@ router.post('/create-project', async (req, res) => {
         }
 
         const newProject = {
-            id: `${data.email}-${Date.now()}`,
+            id: `${data.email}-${Date.now()}-${Math.random()}`,
             name: 'new Project',
             status: 'Not Finished',
             link: '',
