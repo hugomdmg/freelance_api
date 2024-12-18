@@ -42,7 +42,7 @@ router.post('/delete-project', async (req, res) => {
             return res.status(404).send({ status: 404, message: 'User not found' });
         }
 
-        const projectIndex = user.projects.findIndex((project) => project.name === data.project.name);
+        const projectIndex = user.projects.findIndex((project) => project.id === data.project.id);
         if (projectIndex === -1) {
             return res.status(404).send({ status: 404, message: 'Project not found' });
         }
