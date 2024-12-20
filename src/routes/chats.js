@@ -7,12 +7,12 @@ const router = Router()
 
 router.post('/get-messages', async (req, res) => {
     const data = req.body;
+    const user = await db.getFilteredItems('users', { email: data.user1 });
 
     try {
-        const user = await db.getFilteredItems('users', { email: data.user1 });
 
         if (user.length === 0) {
-            return res.status(404).send({ status: 'User not found', data: [] });
+            return res.status(404).send({ status: 400, message: 'User not found', data: { owner: '', messages: [] } });
         }
 
         for (const chat of user[0].chats) {
@@ -21,11 +21,11 @@ router.post('/get-messages', async (req, res) => {
             }
         }
 
-        return res.send({ status: 'Chat not found', data: { owner: '', messages: [] } });
+        return res.send({ status: 400, message: 'Chat not found', data: { owner: '', messages: [] } });
 
     } catch (error) {
         console.error('Error in /get-messages:', error);
-        res.status(500).send({ status: 'Internal server error', data: [] });
+        res.status(500).send({ status: 500, message: 'Internal server error', data: { owner: '', messages: [] } });
     }
 });
 
@@ -68,7 +68,7 @@ router.post('/send-message', async (req, res) => {
                 messages: [{ owner: data.emailUser1, message: data.message }],
             });
         }
-        if(user1.roll !== 'admin'){
+        if (user1.roll !== 'admin') {
             setNotification(user2, 'message')
         }
 
