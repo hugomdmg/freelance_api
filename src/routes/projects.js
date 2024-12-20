@@ -35,28 +35,26 @@ router.post('/create-project', async (req, res) => {
 });
 
 router.post('/delete-project', async (req, res) => {
+    const data = req.body;
+    const [user] = await db.getFilteredItems('users', { email: data.email });
     try {
-        const data = req.body;
-        const [user] = await db.getFilteredItems('users', { email: data.email });
-
         if (!user) {
-            return res.status(404).send({ status: 404, message: 'User not found' });
+            return res.status(404).send({ status: 404, message: 'User not found', data: null });
         }
 
         const projectIndex = user.projects.findIndex((project) => project.id === data.project.id);
         if (projectIndex === -1) {
-            return res.status(404).send({ status: 404, message: 'Project not found' });
+            return res.status(404).send({ status: 404, message: 'Project not found', data: null });
         }
 
         user.projects.splice(projectIndex, 1);
         await db.updateItem('users', { email: data.email }, user);
         setNotification(user, 'project deleted')
 
-
-        res.send({ status: 200, data: user });
+        res.send({ status: 200, message: 'success', data: user });
     } catch (error) {
         console.error(error);
-        res.status(500).send({ status: 500, message: 'Internal server error' });
+        res.status(500).send({ status: 500, message: 'Internal server error', data: null });
     }
 });
 
