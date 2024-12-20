@@ -6,41 +6,41 @@ const router = Router();
 
 router.get('/users', async (req, res) => {
     try {
-        res.status(200).json(await db.getAllItems('users'));
+        const users = await db.getAllItems('users');
+        res.json(users);
     } catch (error) {
         console.error('Error fetching users:', error);
-        res.send({ status: 500, value: 'Internal server error' });
+        res.send({ status: 500, message: 'Internal server error' });
     }
 });
 
 router.post('/register', async (req, res) => {
     const { email, password } = req.body;
-    const user = {
-        email: '',
-        password: '',
-        roll: 'costumer',
-        projects: [],
-        chats: []
-    }
 
     if (!email || !password) {
-        return res.send({ status: 400, value: 'email and password are required' });
+        return res.send({ status: 400, message: 'Email and password are required' });
     }
 
     try {
-        const registered = await db.getFilteredItems('users', { email });
+        const existingUsers = await db.getFilteredItems('users', { email });
 
-        if (registered.length === 0) {
-            user.password = await bcrypt.hash(password, 10);
-            user.email = email
-            await db.addItem('users', user);
-            res.send({ status: 201, value: 'User registered successfully' });
+        if (existingUsers.length === 0) {
+            const hashedPassword = await bcrypt.hash(password, 10);
+            const newUser = {
+                email,
+                password: hashedPassword,
+                roll: 'costumer',
+                projects: [],
+                chats: []
+            };
+            await db.addItem('users', newUser);
+            res.send({ status: 201, message: 'User registered successfully' });
         } else {
-            res.send({ status: 400, value: 'email already registered' });
+            res.send({ status: 400, message: 'Email already registered' });
         }
     } catch (error) {
         console.error('Error during registration:', error);
-        res.send({ status: 500, value: 'Internal server error' });
+        res.send({ status: 500, message: 'Internal server error' });
     }
 });
 
@@ -48,25 +48,79 @@ router.post('/login', async (req, res) => {
     const { email, password } = req.body;
 
     if (!email || !password) {
-        return res.status(400).send('email and password are required');
+        return res.send({ status: 400, message: 'Email and password are required' });
     }
 
     try {
-        const registered = await db.getFilteredItems('users', { email });
+        const [user] = await db.getFilteredItems('users', { email });
 
-        if (registered.length === 1) {
-            const match = await bcrypt.compare(password, registered[0].password);
+        if (user) {
+            const match = await bcrypt.compare(password, user.password);
             if (match) {
-                res.send({ status: 200, value: 'Login successful', data: registered[0] });
+                res.send({ status: 200, message: 'Login successful', data: user });
             } else {
-                res.send({ status: 400, value: 'Invalid email or password', data: {} });
+                res.send({ status: 400, message: 'Invalid email or password' });
             }
         } else {
-            res.send({ status: 400, value: 'Invalid email or password', data: {} });
+            res.send({ status: 400, message: 'Invalid email or password' });
         }
     } catch (error) {
         console.error('Error during login:', error);
-        res.send({ status: 500, value: 'Internal server error' });
+        res.send({ status: 500, message: 'Internal server error' });
+    }
+});
+
+router.post('/update-account', async (req, res) => {
+    const { prevEmail, email, password } = req.body;
+
+    if (!prevEmail || !email || !password) {
+        return res.send({ status: 400, message: 'All fields are required' });
+    }
+
+    try {
+        const [user] = await db.getFilteredItems('users', { email: prevEmail });
+
+        if (!user) {
+            return res.send({ status: 404, message: 'User not found' });
+        }
+
+        user.email = email;
+        user.password = await bcrypt.hash(password, 10);
+
+        await db.updateItem('users', { email: prevEmail }, user);
+
+        res.send({ status: 200, message: 'Account updated successfully', data: user });
+    } catch (error) {
+        console.error('Error updating account:', error);
+        res.send({ status: 500, message: 'Internal server error' });
+    }
+});
+
+router.post('/delete-account', async (req, res) => {
+    const { email, password } = req.body;
+
+    if (!email || !password) {
+        return res.send({ status: 400, message: 'Email and password are required' });
+    }
+
+    try {
+        const [user] = await db.getFilteredItems('users', { email });
+
+        if (!user) {
+            return res.send({ status: 404, message: 'User not found' });
+        }
+
+        const match = await bcrypt.compare(password, user.password);
+
+        if (match) {
+            await db.deleteItem('users', { email });
+            res.send({ status: 200, message: 'Account deleted successfully' });
+        } else {
+            res.send({ status: 400, message: 'Invalid email or password' });
+        }
+    } catch (error) {
+        console.error('Error deleting account:', error);
+        res.send({ status: 500, message: 'Internal server error' });
     }
 });
 
