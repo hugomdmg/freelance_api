@@ -11,7 +11,7 @@ router.post('/get-messages', async (req, res) => {
         const user = await db.getFilteredItems('users', { email: data.user1 });
 
         if (user.length === 0) {
-            return res.status(404).send({ status: 404, data: 'User not found' });
+            return res.status(404).send({ status: 'User not found', data: [] });
         }
 
         for (const chat of user[0].chats) {
@@ -20,11 +20,11 @@ router.post('/get-messages', async (req, res) => {
             }
         }
 
-        return res.send({ status: 404, data: 'Chat not found' });
+        return res.send({ status: 'Chat not found', data: { owner: '', messages: [] } });
 
     } catch (error) {
         console.error('Error in /get-messages:', error);
-        res.status(500).send({ status: 500, data: 'Internal server error' });
+        res.status(500).send({ status: 'Internal server error', data: [] });
     }
 });
 
@@ -37,7 +37,7 @@ router.post('/send-message', async (req, res) => {
         const [user2] = await db.getFilteredItems('users', { email: data.emailUser2 });
 
         if (!user1 || !user2) {
-            return res.status(404).send({ status: 404, value: 'Users not found' });
+            return res.status(404).send({ status: 'Users not found', data: [] });
         }
 
         let chatUpdated1 = false;
@@ -75,11 +75,11 @@ router.post('/send-message', async (req, res) => {
         await db.updateItem('users', { email: data.emailUser1 }, user1);
         await db.updateItem('users', { email: data.emailUser2 }, user2);
 
-        res.status(200).send({ status: 200, value: 'Message sent successfully' });
+        res.status(200).send({ status: 'Message sent successfully', data: [] });
 
     } catch (error) {
         console.error('Error while sending message:', error);
-        res.status(500).send({ status: 500, value: 'Internal server error' });
+        res.status(500).send({ status: 'Internal server error', data: [] });
     }
 });
 
