@@ -80,17 +80,17 @@ router.post('/send-message', async (req, res) => {
             });
         }
         if (user1.roll !== 'admin') {
-            setNotification(user2, 'message')
+            setNotification(user1, 'message')
         }
 
         await db.updateItem('users', { email: data.emailUser1 }, user1);
         await db.updateItem('users', { email: data.emailUser2 }, user2);
 
-        res.status(200).send({ status: 'Message sent successfully', data: [] });
+        res.status(200).send({ status: 200, message: 'Message sent successfully', data: emptyChat });
 
     } catch (error) {
         console.error('Error while sending message:', error);
-        res.status(500).send({ status: 'Internal server error', data: [] });
+        res.status(500).send({ status: 500, message: 'Internal server error', data: emptyChat });
     }
 });
 
