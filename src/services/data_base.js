@@ -15,13 +15,16 @@ const client = new MongoClient(uri, {
         version: ServerApiVersion.v1,
         strict: true,
         deprecationErrors: true,
+        maxIdleTimeMS: 300000,
+
     },
 });
 
+client.connect()
+
 
 class DataBase {
-    constructor() {
-    }
+    constructor() {}
 
     async connect() {
         if (!client.topology || !client.topology.isConnected()) {
@@ -36,47 +39,37 @@ class DataBase {
     }
 
     async getAllItems(collectionName) {
-        await this.connect();
         const database = client.db(dataBase);
         const collection = database.collection(collectionName);
         const items = await collection.find().toArray();
-        await this.disconnect();
         return items;
     }
 
     async getFilteredItems(collectionName, filter) {
-        await this.connect();
         const database = client.db(dataBase);
         const collection = database.collection(collectionName);
         const items = await collection.find(filter).toArray();
-        await this.disconnect();
         return items;
     }
 
     async addItem(collectionName, item) {
-        await this.connect();
         const database = client.db(dataBase);
         const collection = database.collection(collectionName);
         const result = await collection.insertOne(item);
-        await this.disconnect();
         return result;
     }
 
     async deleteItem(collectionName, filter) {
-        await this.connect();
         const database = client.db(dataBase);
         const collection = database.collection(collectionName);
         const result = await collection.deleteOne(filter);
-        await this.disconnect();
         return result;
     }
 
     async updateItem(collectionName, filter, update) {
-        await this.connect();
         const database = client.db(dataBase);
         const collection = database.collection(collectionName);
         const result = await collection.updateOne(filter, { $set: update });
-        await this.disconnect();
         return result;
     }
 }
