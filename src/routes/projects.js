@@ -1,5 +1,7 @@
 import { Router } from 'express';
 import db from '../services/data_base.js';
+import { setNotification } from './notifications.js';
+
 
 const router = Router();
 
@@ -25,6 +27,7 @@ router.post('/create-project', async (req, res) => {
 
         user.projects.push(newProject);
         await db.updateItem('users', { email: data.email }, user);
+        setNotification(user, 'project created')
 
         res.send({ status: 200, data: user });
     } catch (error) {
@@ -49,6 +52,8 @@ router.post('/delete-project', async (req, res) => {
 
         user.projects.splice(projectIndex, 1);
         await db.updateItem('users', { email: data.email }, user);
+        setNotification(user, 'project deleted')
+
 
         res.send({ status: 200, data: user });
     } catch (error) {
@@ -73,6 +78,7 @@ router.post('/update-project', async (req, res) => {
 
         user.projects[projectIndex] = data.project;
         await db.updateItem('users', { email: data.email }, user);
+        setNotification(user, 'project updated')
 
         res.send({ status: 200, data: user });
     } catch (error) {

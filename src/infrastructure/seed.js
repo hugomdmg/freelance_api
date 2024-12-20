@@ -14,6 +14,7 @@ const seedData = async () => {
             password: password1,
             roll: 'admin',
             projects: [],
+            notifications:[],
             chats: [
                 {
                     user: 'usuario 2',
@@ -37,6 +38,7 @@ const seedData = async () => {
             email: 'usuario 2',
             password: password2,
             roll: 'costumer',
+            notifications:[],
             projects: [
                 {
                     id:23,
@@ -83,6 +85,7 @@ const seedData = async () => {
             email: 'usuario 3',
             password: password3,
             roll: 'costumer',
+            notifications:[],
             projects: [
                 {
                     id:32232131,

@@ -1,5 +1,6 @@
 import { Router } from 'express';
 import db from '../services/data_base.js';
+import { setNotification } from './notifications.js';
 
 const router = Router();
 
@@ -13,6 +14,8 @@ router.post('/make-payment', async (req, res) => {
     console.log(data.paymentData)
 
     const result = await db.updateItem('users', {email:data.email}, user)
+
+    setNotification(user, 'payment')
 
     res.send({ status: 200, value: result })
 

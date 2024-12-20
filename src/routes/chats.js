@@ -1,6 +1,7 @@
 import { Router } from 'express';
 import bcrypt from 'bcrypt';
 import db from '../services/data_base.js';
+import { setNotification } from './notifications.js';
 
 const router = Router()
 
@@ -41,36 +42,34 @@ router.post('/send-message', async (req, res) => {
         }
 
         let chatUpdated1 = false;
-        let index1 = 0
         user1.chats.forEach((chat, i) => {
             if (chat.user === data.emailUser2) {
                 user1.chats[i].messages.push({ owner: data.emailUser1, message: data.message });
-                index1 = i
                 chatUpdated1 = true;
             }
         });
         if (!chatUpdated1) {
-            user1.chats[index1].messages.push({
+            user1.chats.push({
                 user: data.emailUser2,
-                messages: [data.message],
+                messages: [{ owner: data.emailUser1, message: data.message }],
             });
         }
 
         let chatUpdated2 = false;
-        let index2 = 0
         user2.chats.forEach((chat, i) => {
             if (chat.user === data.emailUser1) {
                 user2.chats[i].messages.push({ owner: data.emailUser1, message: data.message })
-                index2 = i
                 chatUpdated2 = true;
             }
         });
         if (!chatUpdated2) {
-            user2.chats[index2].messages.push({
+            user2.chats.push({
                 user: data.emailUser1,
-                messages: [data.message],
+                messages: [{ owner: data.emailUser1, message: data.message }],
             });
         }
+
+        setNotification(user2, 'message')
 
         await db.updateItem('users', { email: data.emailUser1 }, user1);
         await db.updateItem('users', { email: data.emailUser2 }, user2);
