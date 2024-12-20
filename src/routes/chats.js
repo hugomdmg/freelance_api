@@ -5,14 +5,25 @@ import { setNotification } from './notifications.js';
 
 const router = Router()
 
+const emptyChat = {
+    user: null,
+    messages: [
+        {
+            owner: null,
+            message: null
+        }
+    ]
+}
+
 router.post('/get-messages', async (req, res) => {
     const data = req.body;
     const user = await db.getFilteredItems('users', { email: data.user1 });
 
+
     try {
 
         if (user.length === 0) {
-            return res.status(404).send({ status: 400, message: 'User not found', data: { owner: '', messages: [] } });
+            return res.status(404).send({ status: 400, message: 'User not found', data: emptyChat });
         }
 
         for (const chat of user[0].chats) {
@@ -21,11 +32,11 @@ router.post('/get-messages', async (req, res) => {
             }
         }
 
-        return res.send({ status: 400, message: 'Chat not found', data: { owner: '', messages: [] } });
+        return res.send({ status: 400, message: 'Chat not found', data: emptyChat });
 
     } catch (error) {
         console.error('Error in /get-messages:', error);
-        res.status(500).send({ status: 500, message: 'Internal server error', data: { owner: '', messages: [] } });
+        res.status(500).send({ status: 500, message: 'Internal server error', data: emptyChat });
     }
 });
 
