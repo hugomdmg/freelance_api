@@ -11,7 +11,13 @@ const port = process.env.port || 3001
 
 app.use(urlencoded({ extended: false }))
 app.use(json())
-app.use(cors());
+app.use(cors(
+    {
+        origin: 'https://freelance-9p5y20ll1-hugomdmgs-projects.vercel.app', // Permitir solo este dominio
+        methods: ['GET', 'POST', 'PUT', 'DELETE'], // Métodos permitidos
+        credentials: true,
+    }
+));
 
 app.use(users)
 app.use(chats)
@@ -19,7 +25,7 @@ app.use(projects)
 app.use(payment)
 app.use(notifications)
 
-app.get('/', (req, res)=>{
+app.get('/', (req, res) => {
     res.send('hello world, this is Hugo freelance api')
 })
 
