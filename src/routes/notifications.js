@@ -34,7 +34,7 @@ export default router
 export const setNotification = async (costumer, type)=>{
     const [user] = await db.getFilteredItems('users', { roll: 'admin' });
 
-    user.notifications.push({ user: costumer.email, type: type, id: user.email +'-'+ Math.random() })
+    user.notifications.push({ user: costumer.email, type: type, id: costumer.email +'-'+ Math.random() })
     await db.updateItem('users', { roll: 'admin' }, user);
 
 }

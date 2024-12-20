@@ -68,8 +68,9 @@ router.post('/send-message', async (req, res) => {
                 messages: [{ owner: data.emailUser1, message: data.message }],
             });
         }
-
-        setNotification(user2, 'message')
+        if(user1.roll !== 'admin'){
+            setNotification(user2, 'message')
+        }
 
         await db.updateItem('users', { email: data.emailUser1 }, user1);
         await db.updateItem('users', { email: data.emailUser2 }, user2);
