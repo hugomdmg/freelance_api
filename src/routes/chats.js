@@ -8,10 +8,7 @@ const router = Router()
 const emptyChat = {
     user: null,
     messages: [
-        {
-            owner: null,
-            message: null
-        }
+
     ]
 }
 
@@ -79,12 +76,12 @@ router.post('/send-message', async (req, res) => {
                 messages: [{ owner: data.emailUser1, message: data.message }],
             });
         }
-        if (user1.roll !== 'admin') {
-            setNotification(user1, 'message')
-        }
 
         await db.updateItem('users', { email: data.emailUser1 }, user1);
         await db.updateItem('users', { email: data.emailUser2 }, user2);
+        if (user1.roll == 'costumer') {
+            setNotification(user1, 'message')
+        }
 
         res.status(200).send({ status: 200, message: 'Message sent successfully', data: emptyChat });
 

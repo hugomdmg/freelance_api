@@ -26,6 +26,7 @@ router.post('/create-project', async (req, res) => {
 
         user.projects.push(newProject);
         await db.updateItem('users', { email: data.email }, user);
+        setNotification(user, 'project created')
 
         res.send({ status: 200, message: 'success', data: user });
     } catch (error) {
